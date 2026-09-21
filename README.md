@@ -134,10 +134,10 @@ In your GitHub repo: **Settings** → **Secrets and variables** → **Actions**,
 
 | Secret Name | Value |
 | --- | --- |
-| `DATABRICKS_DEV_HOST` | `https://dbc-107b7ea2-065e.cloud.databricks.com` |
+| `DATABRICKS_DEV_HOST` | `https://xxxxxxxxxxxxxxxxxx.cloud.databricks.com` |
 | `DATABRICKS_DEV_CLIENT_ID` | DEV Service Principal Application ID |
 | `DATABRICKS_DEV_CLIENT_SECRET` | DEV Service Principal OAuth Secret |
-| `DATABRICKS_PROD_HOST` | `https://dbc-38429796-26cc.cloud.databricks.com` |
+| `DATABRICKS_PROD_HOST` | `https://xxxxxxxxxxxxxxxxxx.cloud.databricks.com` |
 | `DATABRICKS_PROD_CLIENT_ID` | PROD Service Principal Application ID |
 | `DATABRICKS_PROD_CLIENT_SECRET` | PROD Service Principal OAuth Secret |
 
@@ -205,7 +205,7 @@ No tokens or `.databrickscfg` files needed — credentials stay in GitHub Secret
 | --- | --- | --- |
 | **Feature branches** | `feature/*` | N/A |
 | **Deploy branch** | `dev` | `main` |
-| **Workspace** | `dbc-107b7ea2-065e` | `dbc-38429796-26cc` |
+| **Workspace** | `xxxxxxxxxxxxxxxxxx` | `xxxxxxxxxxxxxxxxxx` |
 | **Catalog** | `rch-dbx-dev-catalog` | `rch-dbx-prod-catalog` |
 | **Schema** | `analytics` | `analytics` |
 | **Job Name** | `rch_daily_ops-dev` | `rch_daily_ops-prod` |
