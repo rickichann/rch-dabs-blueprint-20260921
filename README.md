@@ -6,9 +6,9 @@ Declarative Automation Bundle for the RCH project. Manages job definitions as co
 
 ## CI/CD Pipeline Diagram
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                        Git Branching Strategy                          │
+│                        Git Branching Strategy                           │
 └─────────────────────────────────────────────────────────────────────────┘
 
   Developer                  GitHub                        Databricks
@@ -72,7 +72,7 @@ Declarative Automation Bundle for the RCH project. Manages job definitions as co
 
 ### Flow Summary
 
-```
+```text
 feature/* ──push──> CI validates
     │
     └──PR──> dev ──merge──> DEV workspace
@@ -93,7 +93,7 @@ feature/* ──push──> CI validates
 
 ## Project Structure
 
-```
+```text
 rch-dabs/
 ├── databricks.yml                   → Bundle config (targets: dev & prod)
 ├── resources/
@@ -161,7 +161,7 @@ No tokens or `.databrickscfg` files needed — credentials stay in GitHub Secret
 
 ### Daily Workflow for Developers
 
-```
+```text
 1. Create feature branch     →  git checkout -b feature/my-change
 2. Make changes              →  Edit notebooks, YAML, or config
 3. Validate locally          →  databricks bundle validate --target dev
@@ -201,7 +201,7 @@ No tokens or `.databrickscfg` files needed — credentials stay in GitHub Secret
 
 ## Environment Details
 
-| | DEV | PROD |
+| Aspect | DEV | PROD |
 | --- | --- | --- |
 | **Feature branches** | `feature/*` | N/A |
 | **Deploy branch** | `dev` | `main` |
@@ -224,5 +224,3 @@ No tokens or `.databrickscfg` files needed — credentials stay in GitHub Secret
 | Validation fails | Run `databricks bundle validate --target dev` locally |
 | Job fails at runtime | Check catalog/schema exist with correct permissions |
 | Can't deploy prod manually | By design — prod only deploys via merge to `main` |
-#   r c h - d a b s - b l u e p r i n t - 2 0 2 6 0 9 2 1  
- 
