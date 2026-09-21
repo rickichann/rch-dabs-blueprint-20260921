@@ -224,3 +224,7 @@ No tokens or `.databrickscfg` files needed — credentials stay in GitHub Secret
 | Validation fails | Run `databricks bundle validate --target dev` locally |
 | Job fails at runtime | Check catalog/schema exist with correct permissions |
 | Can't deploy prod manually | By design — prod only deploys via merge to `main` |
+
+---
+
+**Reference:** [CI/CD on Databricks](https://docs.databricks.com/aws/en/dev-tools/ci-cd/) — official Databricks documentation.
