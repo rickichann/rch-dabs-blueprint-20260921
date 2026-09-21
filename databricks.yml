@@ -1,0 +1,40 @@
+# Declarative Automation Bundle: rch-dabs
+# CI/CD for RCH project (dev & prod workspaces)
+
+bundle:
+  name: rch-dabs
+
+include:
+  - resources/*.yml
+
+workspace:
+  root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+
+targets:
+  dev:
+    default: true
+    mode: development
+    workspace:
+      host: https://dbc-107b7ea2-065e.cloud.databricks.com
+    variables:
+      catalog: rch-dbx-dev-catalog
+      schema: analytics
+
+  prod:
+    mode: production
+    workspace:
+      host: https://dbc-38429796-26cc.cloud.databricks.com
+      root_path: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      catalog: rch-dbx-prod-catalog
+      schema: analytics
+    run_as:
+      service_principal_name: 057ec37f-0a85-4127-86ad-1887624ae577
+
+variables:
+  catalog:
+    description: Target Unity Catalog name
+    default: rch-dbx-dev-catalog
+  schema:
+    description: Target schema name
+    default: analytics

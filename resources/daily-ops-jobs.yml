@@ -1,0 +1,22 @@
+resources:
+  jobs:
+    rch_daily_ops:
+      name: rch_daily_ops-${bundle.target}
+      schedule:
+        quartz_cron_expression: "0 55 */6 * * ? *"
+        timezone_id: Asia/Bangkok
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
+      email_notifications:
+        on_failure:
+          - rickichidayatullah@rchcompute.com
+      tasks:
+        - task_key: rch_data_processing
+          notebook_task:
+            notebook_path: ../src/tasks/reconciliation.py
+            base_parameters:
+              catalog: "{{job.parameters.catalog}}"
+              schema: "{{job.parameters.schema}}"

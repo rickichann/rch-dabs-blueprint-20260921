@@ -1,0 +1,59 @@
+# CI Workflow: Validate bundle on Pull Requests and feature branches
+# Uses OAuth M2M (Service Principal) authentication
+
+name: CI - Validate Bundle
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+  push:
+    branches:
+      - 'feature/**'
+
+permissions:
+  contents: read
+
+jobs:
+  enforce-branch-flow:
+    name: Enforce Branch Flow
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Block feature branches from PRing directly to main
+        if: github.base_ref == 'main' && startsWith(github.head_ref, 'feature/')
+        run: |
+          echo "::error::Feature branches cannot PR directly to main. Please PR to dev first, then PR from dev to main."
+          exit 1
+
+  validate:
+    name: Validate Bundle
+    needs: [enforce-branch-flow]
+    if: always() && (needs.enforce-branch-flow.result == 'success' || needs.enforce-branch-flow.result == 'skipped')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+
+      - name: Validate bundle (dev target)
+        run: databricks bundle validate --target dev
+        working-directory: .
+        env:
+          DATABRICKS_AUTH_TYPE: oauth-m2m
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_DEV_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_DEV_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_DEV_CLIENT_SECRET }}
+
+      - name: Validate bundle (prod target)
+        run: databricks bundle validate --target prod
+        working-directory: .
+        env:
+          DATABRICKS_AUTH_TYPE: oauth-m2m
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_PROD_HOST }}
+          DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_PROD_CLIENT_ID }}
+          DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_PROD_CLIENT_SECRET }}

@@ -1,0 +1,38 @@
+# CD Workflow: Deploy to PROD workspace
+# Triggers on push to main branch (after PR merge)
+# Uses OAuth M2M (Service Principal) authentication
+
+name: CD - Deploy to Prod
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-prod:
+    name: Deploy to Prod Workspace
+    runs-on: ubuntu-latest
+    env:
+      DATABRICKS_AUTH_TYPE: oauth-m2m
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_PROD_HOST }}
+      DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_PROD_CLIENT_ID }}
+      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_PROD_CLIENT_SECRET }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+
+      - name: Validate bundle
+        run: databricks bundle validate --target prod
+        working-directory: .
+
+      - name: Deploy bundle to prod
+        run: databricks bundle deploy --target prod
+        working-directory: .

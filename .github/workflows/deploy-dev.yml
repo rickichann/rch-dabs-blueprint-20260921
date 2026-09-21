@@ -1,0 +1,38 @@
+# CD Workflow: Deploy to DEV workspace
+# Triggers on push to dev branch
+# Uses OAuth M2M (Service Principal) authentication
+
+name: CD - Deploy to Dev
+
+on:
+  push:
+    branches:
+      - dev
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-dev:
+    name: Deploy to Dev Workspace
+    runs-on: ubuntu-latest
+    env:
+      DATABRICKS_AUTH_TYPE: oauth-m2m
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_DEV_HOST }}
+      DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_DEV_CLIENT_ID }}
+      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_DEV_CLIENT_SECRET }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+
+      - name: Validate bundle
+        run: databricks bundle validate --target dev
+        working-directory: .
+
+      - name: Deploy bundle to dev
+        run: databricks bundle deploy --target dev
+        working-directory: .
